@@ -6,8 +6,8 @@ import java.util.TimerTask;
 
 public class Test {
     private static int a = 1;
-    private final static int WIDTH = 280;
-    private final static int HEIGHT = 340;
+    private final static int WIDTH = 320;
+    private final static int HEIGHT = 480;
     private final static int START_POS_WIDTH = WIDTH / 2;
     private final static int START_POS_HEIGHT = HEIGHT / 2;
     private static Point [] points;
