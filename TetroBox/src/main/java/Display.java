@@ -17,8 +17,9 @@ public class Display {
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             content = new Canvas();
 
-            Dimension size = new Dimension(200, 600);
+            Dimension size = new Dimension(360, 500);
             content.setPreferredSize(size);
+            content.setBackground(Color.black);
 
             window.setResizable(false);
             window.getContentPane().add(content);
