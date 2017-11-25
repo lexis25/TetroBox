@@ -3,7 +3,7 @@ package graphics;
 import java.awt.*;
 import java.util.Random;
 
-public class Utils {
+public class Figure {
 
     private final String PATH_IMAGE = "/res/cube.jpg";
 

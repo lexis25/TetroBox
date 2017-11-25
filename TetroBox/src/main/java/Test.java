@@ -1,4 +1,4 @@
-import graphics.Utils;
+import graphics.Figure;
 
 import java.awt.*;
 import java.util.Timer;
@@ -13,7 +13,7 @@ public class Test {
     private static Point [] points;
 
     public static void main(String[] args) {
-        Utils utils = new Utils();
+        Figure utils = new Figure();
         Point[] points = utils.getFigureRandom();
         addPoint(points);
         readPoint(points);
