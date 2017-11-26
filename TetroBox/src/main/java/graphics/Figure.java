@@ -6,6 +6,7 @@ import java.util.Random;
 public class Figure {
 
     private final String PATH_IMAGE = "/res/cube.jpg";
+    private Point[] points;
 
     private final Point[] square = {new Point(32, 32), new Point(64, 32), new Point(32, 64), new Point(64, 64)};
     private final Point[] tube = {new Point(0, 32), new Point(32, 32), new Point(64, 32), new Point(96, 32),
@@ -27,10 +28,8 @@ public class Figure {
     private final Point[] flashV = {new Point(32, 32), new Point(64, 32), new Point(64, 64), new Point(96, 64),
             new Point(64, 0), new Point(64, 32), new Point(32, 32), new Point(32, 64)};
 
-
-    public Point[] getFigureRandom() {
+    public void create() {
         int number = new Random().nextInt(7);
-        Point[] points = new Point[4];
         switch (number) {
             case 0:
                 points = square;
@@ -54,13 +53,25 @@ public class Figure {
                 points = flashV;
                 break;
         }
-        return points;
     }
 
-    public Image getImage(){
-        int number = new Random().nextInt(6);
-        //number * 18 + 2;
-        return null;
+    public void rotation() {// test only step array
+       if(points.length > 4){
+           Point [] temp = new Point[4];
+           int counter = 0;
+           for (int i = 0; i < temp.length; i++) {
+               temp[i] = points[i];
+           }
+           for (int i = 0; i < points.length - 4; i++) {
+               points[i] = points[i + 4];
+           }
+           for (int i = points.length - 4; i < points.length; i++) {
+               points[i] = temp[counter];
+           }
+       }
     }
 
+    public Point [] getPoints(){
+        return this.points;
+    }
 }

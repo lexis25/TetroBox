@@ -26,6 +26,8 @@ public class Display {
             window.pack();
             window.setLocationRelativeTo(null);
             window.setVisible(true);
+
+
         }
 
     }

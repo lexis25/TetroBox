@@ -1,6 +1,7 @@
 import graphics.Figure;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,15 +11,24 @@ public class Test {
     private final static int HEIGHT = 480;
     private final static int START_POS_WIDTH = WIDTH / 2;
     private final static int START_POS_HEIGHT = HEIGHT / 2;
-    private static Point [] points;
+    private static Point[] points;
+    private  static int [][] arr = {{0,1,0,1},{0,1,0,1},{0,0,0,0},{1,0,0,1}};
 
     public static void main(String[] args) {
-        Figure utils = new Figure();
-        Point[] points = utils.getFigureRandom();
-        addPoint(points);
-        readPoint(points);
+
 
     }
+
+    public static void compareArray(int [][] com){
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                if(arr[i][j] != com[i][j]){
+
+                }
+            }
+        }
+    }
+
 
     public static void addPoint(Point[] points) {
 
@@ -40,7 +50,7 @@ public class Test {
             public void run() {
                 moveGravity();
             }
-        },0,1000);
+        }, 0, 1000);
     }
 
     private void moveGravity() {
