@@ -19,9 +19,24 @@ public class GameField {
 
     public static void main(String[] args) {
 
-        Point[] points = {new Point(32, 0), new Point(32, 32), new Point(64, 32), new Point(32, 64)};
-        writeFigure(points);
+        Point[] points = {new Point(32, 0), new Point(32, 32), new Point(64, 32), new Point(32, 64),
+                new Point(0, 32), new Point(32, 32), new Point(64, 32), new Point(32, 64)};
+        Player player = new Player();
+
+        writeFigure(player.rotationFigure(points));
+        System.out.println(points.length);
+        clearFigure(points);
+        writeFigure(player.rotationFigure(points));
+        readPoint(points);
+        //writeFigure(points);
+        //clearFigure(points);
         readArray(arrayField);
+    }
+
+    public static void readPoint(Point [] arr){
+        for (int i = 0; i < arr.length; i++) {
+            System.out.println(arr[i]);
+        }
     }
 
     public static void resetField() {
@@ -42,8 +57,14 @@ public class GameField {
     }
 
     public static void writeFigure(Point[] points) {
-        for (int i = 0; i < points.length; i++) {
+        for (int i = 0; i < 4; i++) {
             arrayField[((HEIGHT - points[i].y) / 32) - 1][((points[i].x + (WIDTH / 2)) / 32) - 1] = 1;
+        }
+    }
+
+    public static void clearFigure(Point[] points) {
+        for (int i = 0; i < 5; i++) {
+            arrayField[((HEIGHT - points[i].y) / 32) - 1][((points[i].x + (WIDTH / 2)) / 32) - 1] = 0;
         }
     }
 
