@@ -16,7 +16,7 @@ public class Loader {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return image;
+        return image;//
     }
 
 }
