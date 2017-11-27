@@ -5,7 +5,6 @@ import java.util.Random;
 
 public class Figure {
 
-    private final String PATH_IMAGE = "/res/cube.jpg";
     private Point[] points;
 
     private final Point[] square = {new Point(32, 32), new Point(64, 32), new Point(32, 64), new Point(64, 64)};
@@ -55,18 +54,17 @@ public class Figure {
         }
     }
 
-    public void rotation() {// test only step array
+    public void rotation() {
        if(points.length > 4){
-           Point [] temp = new Point[4];
-           int counter = 0;
-           for (int i = 0; i < temp.length; i++) {
-               temp[i] = points[i];
-           }
-           for (int i = 0; i < points.length - 4; i++) {
-               points[i] = points[i + 4];
-           }
-           for (int i = points.length - 4; i < points.length; i++) {
-               points[i] = temp[counter];
+           for (int i = 0; i < 4; i++) {
+               Point temp = points[0];
+               for (int j = 0; j < points.length ; j++) {
+                   points[j] = points[j + 1];
+                   if(j == (points.length - 2)){
+                       points[points.length-1] = temp;
+                       break;
+                   }
+               }
            }
        }
     }
