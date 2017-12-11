@@ -1,6 +1,8 @@
 import graphics.Figure;
 
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /***
  * Class virtual board
@@ -39,25 +41,43 @@ public class GameField {
         }
     }
 
-
     public static void readPoint(Point [] arr){
         for (int i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
         }
     }
 
-    public static void resetField() {
-        for (int i = 0; i < arrayField.length; i++) {
-            for (int j = 0; j < arrayField[i].length; j++) {
-                arrayField[i][j] = 0;
-            }
-        }
-    }
-
-    public static void addFigure(Point[] points) {
+    public static void add(Point[] points) {
         for (int i = 0; i < 4; i++) {
             arrayField[((HEIGHT - points[i].y) / 32) - 11][((points[i].x + (WIDTH / 2)) / 32) - 1] = 1;
         }
+    }
+
+    public static void gravity(final int []arr) {
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(moveGravity(arr)){
+                    timer.cancel();
+                }
+            }
+        }, 0, 1000);
+    }
+
+    private static boolean moveGravity(int []arr) {
+        boolean temp = false;
+        for (int i = 0; i <arr.length; i++) {
+            System.out.println(arr[i]);
+            if (arr[i] < 448) {
+                arr[i] += 32;
+            } else if (arr[i] == 448) {
+                temp = true;
+                break;
+            }
+        }
+        return temp;
+
     }
 
     public static void findFillLines(){
@@ -74,13 +94,22 @@ public class GameField {
         }
     }
 
-    public static void destroyLines(){
+    private static void destroyLines(){
         for (int i = 0; i < 1; i++) {
             for (int j = 0; j < arrayField[i].length; j++) {
-                arrayField[i][j] = 0;
+                arrayField[i][j] = 0;// move field down;
                 if(j == arrayField[i].length){
+
                     return;
                 }
+            }
+        }
+    }
+
+    public static void reset() {
+        for (int i = 0; i < arrayField.length; i++) {
+            for (int j = 0; j < arrayField[i].length; j++) {
+                arrayField[i][j] = 0;
             }
         }
     }
