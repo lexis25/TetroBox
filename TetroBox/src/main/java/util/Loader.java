@@ -1,4 +1,4 @@
-package graphics;
+package util;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -16,7 +16,7 @@ public class Loader {
         }catch (IOException e){
             e.printStackTrace();
         }
-        return image;//
+        return image;
     }
 
 }

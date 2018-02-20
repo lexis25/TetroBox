@@ -2,21 +2,21 @@ package logic;
 
 import graphics.Figure;
 
-import java.awt.*;
-import java.util.Stack;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 /***
  * Class virtual board
  * detect collision,
  * fill lines,
+ * gravity
  *
  */
 public class GameField {
 
     private final static int WIDTH = 320;
     private final static int HEIGHT = 448;
+    private static int maxPointY;
+    private static int[] lines = new int[12];
 
     public static Stack<Figure> stack = new Stack<Figure>();
 
@@ -30,9 +30,17 @@ public class GameField {
         }
     }
 
+
     public static void main(String[] args) {
-        stack.push(new Figure());
-        System.out.println(stack.get(0));
+        int height = HEIGHT;
+        lines[0] = HEIGHT;
+        for (int i = 1; i < lines.length; i++) {
+            lines[i] = height -= 32;
+        }
+
+        for (int i = 0; i < lines.length; i++) {
+            System.out.println(lines[i]);
+        }
     }
 
     public static void add(Figure figure) {
@@ -73,28 +81,36 @@ public class GameField {
         return temp;
     }
 
-    private static void checkFillLine(){// need do it simple structure
-        byte [] line = new byte[12];
-        for (int i = 0; i < stack.size(); i++) {
-            for (int j = 0; j < 4 ; j++) {
-                switch (stack.get(i).getPoints()[j].y){
-                    case HEIGHT:
-                        line[line.length - 1] += 1;
-                        default:
-                    case HEIGHT - 32:
-                        line[line.length - 2] += 1;
+    private static void checkFillLine() {
+        int counter = 0;
+        for (int j = 0; j < lines.length; j++) {
+            for (int i = 0; i < stack.size(); i++) {
+                for (int k = 0; k < 4; k++) {
+                    if (stack.get(i).getPoints()[k].y == lines[j]) {
+                        counter++;
+                    } else {
+                        counter--;
+                    }
+                }
+                if (counter == 10) {
+                    removeLines(lines[j]);
+                    counter = 0;
                 }
             }
+            counter = 0;
         }
+    }
 
-        for (int i = 0; i < line.length ; i++) {
-            if(line[i] == 9){
-                for (int j = 0; j < stack.size(); j++) {
-                    for (int k = 0; k < 4; k++) {
-                        if(stack.get(i).getPoints()[k].y == HEIGHT){
-                        stack.get(i).getPoints()[k].y = 0;
-                        }
-                    }
+    private static void removeLines(int remove) {
+        for (int i = 0; i < stack.size(); i++) {
+            for (int j = 0; j < 4; j++) {
+                if (stack.get(i).getPoints()[j].y == remove) {
+                    stack.get(i).getPoints()[j].y = 0;
+                } else {
+                    stack.get(i).getPoints()[j].y -= 32;
+                }
+                if (maxPointY < stack.get(i).getPoints()[j].y) {
+                    maxPointY = stack.get(i).getPoints()[j].y;
                 }
             }
         }

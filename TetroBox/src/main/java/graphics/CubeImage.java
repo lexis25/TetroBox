@@ -1,5 +1,7 @@
 package graphics;
 
+import util.Loader;
+
 import java.awt.image.BufferedImage;
 
 public class CubeImage {

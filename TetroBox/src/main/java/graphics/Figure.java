@@ -66,10 +66,6 @@ public class Figure {
         }
     }
 
-    public String getNameFigure() {
-        return this.nameFigure;
-    }
-
     public void rotation() {
         if (points.length > 4 && canRotation(points)) {
             for (int i = 0; i < 4; i++) {
