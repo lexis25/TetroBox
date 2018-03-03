@@ -16,30 +16,22 @@ public class GameField {
     private final static int WIDTH = 320;
     private final static int HEIGHT = 448;
     private static int maxPointY;
-    private static int[] lines = new int[12];
+    private static int[] lines = {448, 416, 384, 352, 320, 288, 256, 224, 192, 160, 128, 96, 64, 32};
 
     public static Stack<Figure> stack = new Stack<Figure>();
 
     public GameField(Figure figure) {
-        if (stack.empty()) {
-            add(figure);
-            gravity(stack);
-        } else if (!collisionDetect()) {
-            add(figure);
-            gravity(stack);
-        }
-    }
-
-
-    public static void main(String[] args) {
-        int height = HEIGHT;
-        lines[0] = HEIGHT;
-        for (int i = 1; i < lines.length; i++) {
-            lines[i] = height -= 32;
-        }
-
-        for (int i = 0; i < lines.length; i++) {
-            System.out.println(lines[i]);
+        while (true) {
+            if (stack.empty()) {
+                add(figure);
+                gravity(stack);
+            } else if (!collisionDetect()) {
+                add(figure);
+                gravity(stack);
+            } else {
+                System.out.println("GAME OVER");
+                break;
+            }
         }
     }
 
@@ -52,7 +44,19 @@ public class GameField {
     }
 
     public static boolean collisionDetect() {
-        return true;
+        boolean isCollision = false;
+        for (int i = 0; i < 4; i++) {
+            if (stack.lastElement().getPoints()[i].y == (maxPointY + 32)) {
+                for (int j = 0; j < stack.size() - 1; j++) {
+                    if ((stack.lastElement().getPoints()[i].y + 32) == stack.get(j).getPoints()[i].y &&
+                            (stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x) {
+                        isCollision = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return isCollision;
     }
 
     public static void gravity(final Stack<Figure> figures) {
@@ -70,9 +74,9 @@ public class GameField {
     private static boolean moveGravity(Stack<Figure> figures) {
         boolean temp = false;
         for (int i = 0; i < figures.lastElement().getPoints().length; i++) {
-            if (figures.lastElement().getPoints()[i].y < 448 && collisionDetect()) {
+            if (figures.lastElement().getPoints()[i].y < 448 && !collisionDetect()) {
                 figures.lastElement().getPoints()[i].y += 32;
-            } else if (figures.lastElement().getPoints()[i].y == 448) {
+            } else {
                 checkFillLine();
                 temp = true;
                 break;
