@@ -8,7 +8,7 @@ import java.util.*;
  * Class virtual board
  * detect collision,
  * fill lines,
- * gravity
+ * create gravity
  *
  */
 public class GameField {
@@ -19,16 +19,26 @@ public class GameField {
     private static int[] lines = {448, 416, 384, 352, 320, 288, 256, 224, 192, 160, 128, 96, 64, 32};
 
     public static Stack<Figure> stack = new Stack<Figure>();
+    private static boolean bottom;
+    private static boolean left;
+    private static boolean right;
 
-    public GameField(Figure figure) {
+    public GameField() {
+
+    }
+
+
+    public static void run(Figure figure) {
         while (true) {
             if (stack.empty()) {
                 add(figure);
                 gravity(stack);
-            } else if (!collisionDetect()) {
+            } else {
+                collisionDetect();
                 add(figure);
                 gravity(stack);
-            } else {
+            }
+            if (bottom) {
                 System.out.println("GAME OVER");
                 break;
             }
@@ -43,20 +53,22 @@ public class GameField {
         stack.push(figure);
     }
 
-    public static boolean collisionDetect() {
-        boolean isCollision = false;
+    public static void collisionDetect() {
         for (int i = 0; i < 4; i++) {
             if (stack.lastElement().getPoints()[i].y == (maxPointY + 32)) {
                 for (int j = 0; j < stack.size() - 1; j++) {
-                    if ((stack.lastElement().getPoints()[i].y + 32) == stack.get(j).getPoints()[i].y &&
-                            (stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x) {
-                        isCollision = true;
-                        break;
+                    if ((stack.lastElement().getPoints()[i].y + 32) == stack.get(j).getPoints()[i].y) {
+                        bottom = true;
+                    }
+                    if ((stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x) {
+                        left = true;
+                    }
+                    if ((stack.lastElement().getPoints()[i].x - 32) == stack.get(j).getPoints()[i].x) {
+                        right = true;
                     }
                 }
             }
         }
-        return isCollision;
     }
 
     public static void gravity(final Stack<Figure> figures) {
@@ -74,10 +86,12 @@ public class GameField {
     private static boolean moveGravity(Stack<Figure> figures) {
         boolean temp = false;
         for (int i = 0; i < figures.lastElement().getPoints().length; i++) {
-            if (figures.lastElement().getPoints()[i].y < 448 && !collisionDetect()) {
+            if (figures.lastElement().getPoints()[i].y < 448 && !bottom) {
                 figures.lastElement().getPoints()[i].y += 32;
             } else {
                 checkFillLine();
+                nullCollision();
+                run(new Figure());
                 temp = true;
                 break;
             }
@@ -118,5 +132,42 @@ public class GameField {
                 }
             }
         }
+    }
+
+    public static void moveFigure(boolean left, boolean right, boolean bottom){
+        if(left){
+            for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
+                stack.lastElement().getPoints()[i].x += 32;
+            }
+        }
+        if(right){
+            for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
+                stack.lastElement().getPoints()[i].x -= 32;
+            }
+        }
+        if(bottom){
+            for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
+                stack.lastElement().getPoints()[i].y += 32;
+            }
+        }
+    }
+
+
+    private static void nullCollision() {
+        bottom = false;
+        right = false;
+        left = false;
+    }
+
+    public static boolean isBottom() {
+        return bottom;
+    }
+
+    public static boolean isLeft() {
+        return left;
+    }
+
+    public static boolean isRight() {
+        return right;
     }
 }

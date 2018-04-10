@@ -3,6 +3,12 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 
+/***
+ * 1.Need create engine (flow, render, etc)
+ * 2.Implements GameField to class
+ * 3.Add Graphics
+ * 4.Testing
+ * */
 public class Display {
 
     private static boolean isGameRun = false;
@@ -11,15 +17,15 @@ public class Display {
     public static final int CLEAR_COLOR = 0xff000000;
 
 
-    public static void create(){
-        if(isGameRun){
+    public static void create() {
+        if (isGameRun) {
             return;
-        }else{
+        } else {
             JFrame window = new JFrame(TITLE);
             window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             content = new Canvas();
 
-            Dimension size = new Dimension(320, 400);
+            Dimension size = new Dimension(342, 546);
             content.setPreferredSize(size);
             content.setBackground(Color.black);
 
@@ -29,8 +35,11 @@ public class Display {
             window.setLocationRelativeTo(null);
             window.setVisible(true);
 
-
         }
+
+    }
+
+    private static void render() {
 
     }
 
