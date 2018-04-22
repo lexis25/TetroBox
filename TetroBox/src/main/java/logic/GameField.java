@@ -15,6 +15,8 @@ public class GameField {
 
     private final static int WIDTH = 320;
     private final static int HEIGHT = 448;
+    private final static int LEFT_BORDER = 0;
+    private final static int RIGHT_BORDER = 320;
     private static int maxPointY;
     private static int[] lines = {448, 416, 384, 352, 320, 288, 256, 224, 192, 160, 128, 96, 64, 32};
 
@@ -35,8 +37,10 @@ public class GameField {
                 gravity(stack);
             } else {
                 collisionDetect();
-                add(figure);
-                gravity(stack);
+                if (!bottom) {
+                    add(figure);
+                    gravity(stack);
+                }
             }
             if (bottom) {
                 System.out.println("GAME OVER");
@@ -60,11 +64,17 @@ public class GameField {
                     if ((stack.lastElement().getPoints()[i].y + 32) == stack.get(j).getPoints()[i].y) {
                         bottom = true;
                     }
-                    if ((stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x) {
+                    if ((stack.lastElement().getPoints()[i].x - 32) == stack.get(j).getPoints()[i].x &&
+                            stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) {
                         left = true;
+                    }else{
+                        left = false;
                     }
-                    if ((stack.lastElement().getPoints()[i].x - 32) == stack.get(j).getPoints()[i].x) {
+                    if ((stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x &&
+                            stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) {
                         right = true;
+                    }else{
+                        right = false;
                     }
                 }
             }
@@ -86,9 +96,10 @@ public class GameField {
     private static boolean moveGravity(Stack<Figure> figures) {
         boolean temp = false;
         for (int i = 0; i < figures.lastElement().getPoints().length; i++) {
-            if (figures.lastElement().getPoints()[i].y < 448 && !bottom) {
+            if (figures.lastElement().getPoints()[i].y < GameField.HEIGHT && !bottom) {
                 figures.lastElement().getPoints()[i].y += 32;
             } else {
+                clearUnusedFigure();
                 checkFillLine();
                 nullCollision();
                 run(new Figure());
@@ -134,21 +145,46 @@ public class GameField {
         }
     }
 
-    public static void moveFigure(boolean left, boolean right, boolean bottom){
-        if(left){
+    public static void moveFigure(boolean isLeft, boolean isRight, boolean isBottom, boolean isRotation) {
+        if (isLeft) {
             for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
                 stack.lastElement().getPoints()[i].x += 32;
             }
         }
-        if(right){
+        if (isRight) {
             for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
                 stack.lastElement().getPoints()[i].x -= 32;
             }
         }
-        if(bottom){
+        if (isBottom) {
             for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
                 stack.lastElement().getPoints()[i].y += 32;
             }
+        }
+        if (isRotation && stack.lastElement().getPoints().length > 4) {
+            int counter = 0;
+            int collision = 0;
+            for (int i = 4; i < 8; i++) {
+                for (int j = 0; j < stack.size() - 1; j++) {
+                    if (stack.lastElement().getPoints()[i].x > LEFT_BORDER &&
+                            stack.lastElement().getPoints()[i].x < RIGHT_BORDER) {
+                        if (stack.lastElement().getPoints()[i].x != stack.get(j).getPoints()[counter].x &&
+                                stack.lastElement().getPoints()[i].y != stack.get(j).getPoints()[counter].y) {
+                            collision++;
+                        }
+                    }else{
+                        break;
+                    }
+                }
+                if (collision == 0) {
+                    stack.lastElement().rotation();
+                }
+                counter++;
+                if (counter == 4) {
+                    counter = 0;
+                }
+            }
+
         }
     }
 
@@ -169,5 +205,14 @@ public class GameField {
 
     public static boolean isRight() {
         return right;
+    }
+
+    private static void clearUnusedFigure() {
+        for (int i = 0; i < stack.size(); i++) {
+            for (int j = 4; j < stack.get(i).getPoints().length; j++) {
+                stack.get(i).getPoints()[j] = null;
+            }
+        }
+
     }
 }

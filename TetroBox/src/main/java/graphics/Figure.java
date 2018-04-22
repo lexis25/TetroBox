@@ -67,69 +67,16 @@ public class Figure {
     }
 
     public void rotation() {
-        if (points.length > 4 && canRotation(points)) {
-            for (int i = 0; i < 4; i++) {
-                Point temp = points[0];
-                for (int j = 0; j < points.length; j++) {
-                    points[j] = points[j + 1];
-                    if (j == (points.length - 2)) {
-                        points[points.length - 1] = temp;
-                        break;
-                    }
+        for (int i = 0; i < 4; i++) {
+            Point temp = points[0];
+            for (int j = 0; j < points.length; j++) {
+                points[j] = points[j + 1];
+                if (j == (points.length - 2)) {
+                    points[points.length - 1] = temp;
+                    break;
                 }
             }
         }
-    }
-
-    private boolean canRotation(Point[] points) {
-        boolean can = false;
-        if (nameFigure.equals("tube")) {
-            if (points[0].y >= 64 && points[1].y <= 256) {
-                can = true;
-            } else if (points[0].x < points[1].x) {
-                can = true;
-            }
-        }
-        if (nameFigure.equals("boot")) {
-            if (points[2].y < points[3].y && points[2].x <= 288) {
-                can = true;
-            } else if (points[0].y < points[1].y && points[1].y < points[2].y && points[0].x <= 288) {
-                can = true;
-            } else if (points[0].y < points[1].y && points[0].x >= 32) {
-                can = true;
-            } else if (points[1].y < points[2].y && points[2].y < points[3].y && points[1].x >= 64) {
-                can = true;
-            }
-        }
-        if (nameFigure.equals("triangle")) {
-            if (points[0].y < points[1].y && points[1].y < points[3].y && points[0].x >= 32) {
-                can = true;
-            } else if (points[0].y < points[1].y && points[2].x < points[1].x && points[1].y < points[3].y && points[0].x <= 288) {
-                can = true;
-            }
-        }
-        if (nameFigure.equals("flash")) {
-            if (points[0].y < points[1].y && points[0].x >= 32 && points[3].x <= 288) {
-                can = true;
-            }
-        }
-        if (nameFigure.equals("bootV")) {
-            if(points[0].y > points[1].y && points[1].x < points[2].x && points[2].x < points[3].x && points[1].x >= 32){
-                can = true;
-            } else if( points[0].x < points[1].x && points[1].y < points[2].y && points[2].y < points[3].y && points[0].x >= 32 && points[1].x <= 288){
-                can = true;
-            } else if( points[0].x < points[1].x && points[1].x < points[2].x && points[3].y < points[2].y && points[3].x <= 288){
-                can = true;
-            } else if( points[0].y < points[1].y && points[1].y < points[2].y && points[2].x < points[3].x && points[0].x >= 32){
-                can = true;
-            }
-        }
-        if(nameFigure.equals("flashV")){
-            if(points[0].y < points[1].y && points[1].x > points[2].x && points[2].y < points[3].y && points[3].x >= 32 && points[0].x <= 288){
-                can = true;
-            }
-        }
-        return can;
     }
 
     public Point[] getPoints() {

@@ -10,13 +10,16 @@ public class KeyListener extends KeyAdapter {
         super.keyPressed(e);
         int key = e.getKeyCode();
         if (key == KeyEvent.VK_LEFT && !GameField.isLeft()) {
-            GameField.moveFigure(true,false,false);
+            GameField.moveFigure(true,false,false, false);
         }
         if(key == KeyEvent.VK_RIGHT && !GameField.isRight()){
-            GameField.moveFigure(false,true,false);
+            GameField.moveFigure(false,true,false, false);
         }
         if(key == KeyEvent.VK_DOWN && !GameField.isBottom()){
-            GameField.moveFigure(false,false,true);
+            GameField.moveFigure(false,false,true,false);
+        }
+        if(key == KeyEvent.VK_SPACE && !GameField.isBottom()){
+            GameField.moveFigure(false,false,false,true);
         }
     }
 }

@@ -1,5 +1,7 @@
 package main;
 
+import graphics.Figure;
+import logic.GameField;
 import ui.Display;
 
 public class Main {
