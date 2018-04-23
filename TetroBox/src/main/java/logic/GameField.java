@@ -30,15 +30,15 @@ public class GameField {
     }
 
 
-    public static void run(Figure figure) {
+    public static void run() {
         while (true) {
             if (stack.empty()) {
-                add(figure);
+                add(new Figure());
                 gravity(stack);
             } else {
                 collisionDetect();
                 if (!bottom) {
-                    add(figure);
+                    add(new Figure());
                     gravity(stack);
                 }
             }
@@ -52,34 +52,58 @@ public class GameField {
     public static void add(Figure figure) {
         for (int i = 0; i < figure.getPoints().length; i++) {
             figure.getPoints()[i].x = (figure.getPoints()[i].x - (WIDTH / 2));
-            figure.getPoints()[i].y = (figure.getPoints()[i].y - (HEIGHT / 3));
+            figure.getPoints()[i].y = (figure.getPoints()[i].y - lines[9]);
         }
         stack.push(figure);
     }
 
     public static void collisionDetect() {
-        for (int i = 0; i < 4; i++) {
-            if (stack.lastElement().getPoints()[i].y == (maxPointY + 32)) {
+        if (maxPointY == lines[10]) {
+            for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < stack.size() - 1; j++) {
-                    if ((stack.lastElement().getPoints()[i].y + 32) == stack.get(j).getPoints()[i].y) {
+                    if (stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) {
                         bottom = true;
+                        break;
                     }
-                    if ((stack.lastElement().getPoints()[i].x - 32) == stack.get(j).getPoints()[i].x &&
-                            stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) {
-                        left = true;
-                    }else{
-                        left = false;
+                }
+            }
+        } else {
+            if (stack.lastElement().getPoints()[0].y >= (maxPointY - 32) ||
+                    stack.lastElement().getPoints()[1].y >= (maxPointY - 32) ||
+                    stack.lastElement().getPoints()[2].y >= (maxPointY - 32) ||
+                    stack.lastElement().getPoints()[3].y >= (maxPointY - 32)) {
+                for (int i = 0; i < 4; i++) {
+                    for (int j = 0; j < stack.size() - 1; j++) {
+                        if (stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y &&
+                                stack.lastElement().getPoints()[i].y < HEIGHT) {
+                            bottom = true;
+                            break;
+                        }
+                        if ((stack.lastElement().getPoints()[i].x - 32) == stack.get(j).getPoints()[i].x &&
+                                stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y &&
+                                (stack.lastElement().getPoints()[i].x - 32) < LEFT_BORDER) {
+                            left = true;
+                        }
+                        if ((stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x &&
+                                stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y &&
+                                (stack.lastElement().getPoints()[i].x + 32) > RIGHT_BORDER) {
+                            right = true;
+                        }
                     }
-                    if ((stack.lastElement().getPoints()[i].x + 32) == stack.get(j).getPoints()[i].x &&
-                            stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) {
+                }
+            } else {
+                for (int i = 0; i < 4; i++) {
+                    if ((stack.lastElement().getPoints()[i].x + 32) > RIGHT_BORDER) {
                         right = true;
-                    }else{
-                        right = false;
+                    }
+                    if ((stack.lastElement().getPoints()[i].x - 32) < LEFT_BORDER) {
+                        left = true;
                     }
                 }
             }
         }
     }
+
 
     public static void gravity(final Stack<Figure> figures) {
         final Timer timer = new Timer();
@@ -96,13 +120,14 @@ public class GameField {
     private static boolean moveGravity(Stack<Figure> figures) {
         boolean temp = false;
         for (int i = 0; i < figures.lastElement().getPoints().length; i++) {
-            if (figures.lastElement().getPoints()[i].y < GameField.HEIGHT && !bottom) {
+            collisionDetect();
+            if (!bottom) {
                 figures.lastElement().getPoints()[i].y += 32;
             } else {
                 clearUnusedFigure();
                 checkFillLine();
                 nullCollision();
-                run(new Figure());
+                run();
                 temp = true;
                 break;
             }
@@ -172,7 +197,7 @@ public class GameField {
                                 stack.lastElement().getPoints()[i].y != stack.get(j).getPoints()[counter].y) {
                             collision++;
                         }
-                    }else{
+                    } else {
                         break;
                     }
                 }
