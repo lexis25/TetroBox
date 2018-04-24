@@ -1,12 +1,12 @@
 package graphics;
 
 import java.awt.*;
-import java.util.Random;
 
 public class Figure {
 
     private Point[] points;
     private String nameFigure;
+    private static int numFigure = 0;
 
     private final Point[] square = {new Point(32, 32), new Point(64, 32), new Point(32, 64), new Point(64, 64)};
     private final Point[] tube = {new Point(0, 32), new Point(32, 32), new Point(64, 32), new Point(96, 32),
@@ -33,8 +33,7 @@ public class Figure {
     }
 
     private void create() {
-        int number = new Random().nextInt(7);
-        switch (number) {
+        switch (numFigure) {
             case 0:
                 points = square;
                 nameFigure = "square";
@@ -63,7 +62,13 @@ public class Figure {
                 points = flashV;
                 nameFigure = "flashV";
                 break;
+            default:
+                numFigure = 0;
+                points = square;
+                nameFigure = "square";
+                break;
         }
+        numFigure++;
     }
 
     public void rotation() {
@@ -81,5 +86,9 @@ public class Figure {
 
     public Point[] getPoints() {
         return this.points;
+    }
+
+    public String getNameFigure() {
+        return this.nameFigure;
     }
 }
