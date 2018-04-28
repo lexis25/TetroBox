@@ -91,4 +91,11 @@ public class Figure {
     public String getNameFigure() {
         return this.nameFigure;
     }
+/*
+* The conception method rotation() was not effective
+* cause we have a lot of more object in array,
+* which we most erase after each figure.
+* Maybe i can use inversion for this problem,
+* but i have more call function and i need save pre object.
+* */
 }

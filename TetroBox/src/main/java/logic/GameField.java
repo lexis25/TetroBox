@@ -51,11 +51,10 @@ public class GameField {
                 if (!bottom) {
                     add(new Figure());
                     gravity(stack);
+                } else {
+                    System.out.println("GAME OVER");
+                    break;
                 }
-            }
-            if (bottom) {
-                System.out.println("GAME OVER");
-                break;
             }
         }
     }
@@ -161,6 +160,7 @@ public class GameField {
                 if (counter == 10) {
                     listLines.add(lines[j]);
                     removeLines(listLines);
+                    countShore(listLines);
                     counter = 0;
                 }
             }
@@ -179,6 +179,23 @@ public class GameField {
             }
         }
         moveDown(listLines);
+    }
+
+    private static void countShore(ArrayList<Integer> lines) {
+        switch (lines.size()) {
+            case 1:
+                Player.shore += 100;
+                break;
+            case 2:
+                Player.shore += 200;
+                break;
+            case 3:
+                Player.shore += 300;
+                break;
+            case 4:
+                Player.shore += 400;
+                break;
+        }
     }
 
     private static void moveDown(ArrayList<Integer> listLines) {

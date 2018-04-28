@@ -3,7 +3,9 @@ package logic;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class KeyListener extends KeyAdapter {
+public class Player extends KeyAdapter {
+
+    protected static long shore = 0;
 
     @Override
     public void keyPressed(KeyEvent e){
