@@ -218,31 +218,39 @@ public class GameField {
                 stack.lastElement().getPoints()[i].y += WH_FIGURE;
             }
         }
-        if (isRotation && stack.lastElement().getPoints().length > 4) {
-            if (stack.size() > 1) {
-                int collision = 0;
-                for (int i = 4; i < 8; i++) {
-                    for (int j = 0; j < stack.size() - 1; j++) {
-                        for (int k = 0; k < 4; k++) {
-                            if (stack.lastElement().getPoints()[i].x > LEFT_BORDER &&
-                                    stack.lastElement().getPoints()[i].x < RIGHT_BORDER) {
+        if (isRotation && stack.lastElement().getPoints().length > 4 ) {
+            if (getCollisionRotationBorder(stack.lastElement())) {
+                if (stack.size() > 1) {
+                    int collision = 0;
+                    for (int i = 4; i < 8; i++) {
+                        for (int j = 0; j < stack.size() - 1; j++) {
+                            for (int k = 0; k < 4; k++) {
                                 if (stack.lastElement().getPoints()[i].x == stack.get(j).getPoints()[k].x &&
                                         stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[k].y) {
                                     collision++;
                                 }
-                            } else {
-                                break;
                             }
                         }
                     }
-                }
-                if (collision == 0) {
+                    if (collision == 0) {
+                        stack.lastElement().rotation();
+                    }
+                } else {
                     stack.lastElement().rotation();
                 }
-            } else {
-                stack.lastElement().rotation();
             }
         }
+    }
+
+    private static boolean getCollisionRotationBorder(Figure figure) {
+        boolean collision = false;
+        for (int i = 4; i < 8; i++) {
+            if (figure.getPoints()[i].x > LEFT_BORDER &&
+                    figure.getPoints()[i].x < RIGHT_BORDER) {
+                collision = true;
+            }
+        }
+        return collision;
     }
 
 
