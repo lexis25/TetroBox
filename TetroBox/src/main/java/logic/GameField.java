@@ -30,17 +30,6 @@ public class GameField {
 
     }
 
-    //if (stack.get(i).getPoints()[j].y == (Integer) listLines.get(k))
-    public static void main(String[] args) {
-        ArrayList<Integer> arrayList = new ArrayList<Integer>();
-        arrayList.add(32);
-        Stack<Figure> stac = new Stack<Figure>();
-        stac.add(new Figure());
-        if (stac.get(0).getPoints()[0].y == arrayList.get(0)) {
-
-        }
-    }
-
     public static void run() {
         while (true) {
             if (stack.empty()) {
@@ -230,29 +219,25 @@ public class GameField {
             }
         }
         if (isRotation && stack.lastElement().getPoints().length > 4) {
-            int counter = 0;
             int collision = 0;
             for (int i = 4; i < 8; i++) {
                 for (int j = 0; j < stack.size() - 1; j++) {
-                    if (stack.lastElement().getPoints()[i].x > LEFT_BORDER &&
-                            stack.lastElement().getPoints()[i].x < RIGHT_BORDER) {
-                        if (stack.lastElement().getPoints()[i].x != stack.get(j).getPoints()[counter].x &&
-                                stack.lastElement().getPoints()[i].y != stack.get(j).getPoints()[counter].y) {
-                            collision++;
+                    for (int k = 0; k < 4; k++) {
+                        if (stack.lastElement().getPoints()[i].x > LEFT_BORDER &&
+                                stack.lastElement().getPoints()[i].x < RIGHT_BORDER) {
+                            if (stack.lastElement().getPoints()[i].x == stack.get(j).getPoints()[k].x &&
+                                    stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[k].y) {
+                                collision++;
+                            }
+                        } else {
+                            break;
                         }
-                    } else {
-                        break;
                     }
                 }
-                if (collision == 0) {
-                    stack.lastElement().rotation();
-                }
-                counter++;
-                if (counter == 4) {
-                    counter = 0;
-                }
             }
-
+            if (collision == 0) {
+                stack.lastElement().rotation();
+            }
         }
     }
 
