@@ -1,7 +1,9 @@
 package logic;
 
 import graphics.Figure;
+import util.Loader;
 
+import java.awt.*;
 import java.util.*;
 
 /***
@@ -30,77 +32,99 @@ public class GameField {
 
     }
 
+
+
     public static void run() {
-        while (true) {
-            if (stack.empty()) {
+
+        if (stack.empty()) {
+            add(new Figure());
+            gravity(stack);
+        } else {
+            collisionDetect();
                 add(new Figure());
                 gravity(stack);
-            } else {
-                collisionDetect();
-                if (!bottom) {
-                    add(new Figure());
-                    gravity(stack);
-                } else {
-                    System.out.println("GAME OVER");
-                    break;
-                }
             }
         }
-    }
 
     public static void add(Figure figure) {
         for (int i = 0; i < figure.getPoints().length; i++) {
-            figure.getPoints()[i].x = (figure.getPoints()[i].x - (WIDTH / 2));
-            figure.getPoints()[i].y = (figure.getPoints()[i].y - lines[9]);
+            figure.getPoints()[i].x = ((WIDTH / 2) - figure.getPoints()[i].x);
+            figure.getPoints()[i].y = (lines[9] - figure.getPoints()[i].y);
         }
         stack.push(figure);
     }
 
+    public static void printStack() {
+        for (int i = 0; i < stack.size(); i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.println(stack.get(i).getPoints()[j].getLocation());
+            }
+        }
+    }
+
     public static void collisionDetect() {
-        if (maxPointY >= lines[10]) {
+        int maxY = getMaxYFigure();
+        System.out.println(maxY);
+        if (maxY + WH_FIGURE == maxPointY && maxPointY < HEIGHT) {
+            //check divides, bottom and other object
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < stack.size() - 1; j++) {
-                    if (stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) {
+                    if ((stack.lastElement().getPoints()[i].y + WH_FIGURE) == stack.get(j).getPoints()[i].y ||
+                            (stack.lastElement().getPoints()[i].y + WH_FIGURE) == HEIGHT) {
                         bottom = true;
                         break;
                     }
-                }
-            }
-        } else {
-            if (stack.lastElement().getPoints()[0].y >= (maxPointY - WH_FIGURE) ||
-                    stack.lastElement().getPoints()[1].y >= (maxPointY - WH_FIGURE) ||
-                    stack.lastElement().getPoints()[2].y >= (maxPointY - WH_FIGURE) ||
-                    stack.lastElement().getPoints()[3].y >= (maxPointY - WH_FIGURE)) {
-                for (int i = 0; i < 4; i++) {
-                    for (int j = 0; j < stack.size() - 1; j++) {
-                        if ((stack.lastElement().getPoints()[i].y - WH_FIGURE) == stack.get(j).getPoints()[i].y &&
-                                (stack.lastElement().getPoints()[i].y - WH_FIGURE) < HEIGHT) {
-                            bottom = true;
-                            break;
-                        }
-                        if ((stack.lastElement().getPoints()[i].x - WH_FIGURE) == stack.get(j).getPoints()[i].x &&
-                                stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y &&
-                                (stack.lastElement().getPoints()[i].x - WH_FIGURE) < LEFT_BORDER) {
-                            left = true;
-                        }
-                        if ((stack.lastElement().getPoints()[i].x + WH_FIGURE) == stack.get(j).getPoints()[i].x &&
-                                stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y &&
-                                (stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
-                            right = true;
-                        }
-                    }
-                }
-            } else {
-                for (int i = 0; i < 4; i++) {
-                    if ((stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
-                        right = true;
-                    }
-                    if ((stack.lastElement().getPoints()[i].x - WH_FIGURE) < LEFT_BORDER) {
+                    if (((stack.lastElement().getPoints()[i].x - WH_FIGURE) == stack.get(j).getPoints()[i].x &&
+                            stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) ||
+                            (stack.lastElement().getPoints()[i].x - WH_FIGURE) < LEFT_BORDER) {
                         left = true;
                     }
+                    if (((stack.lastElement().getPoints()[i].x + WH_FIGURE) == stack.get(j).getPoints()[i].x &&
+                            stack.lastElement().getPoints()[i].y == stack.get(j).getPoints()[i].y) ||
+                            (stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
+                        right = true;
+                    }
                 }
             }
+        } else if (maxY + WH_FIGURE < maxPointY && maxPointY != HEIGHT) {
+            //check divides
+            for (int i = 0; i < 4; i++) {
+                if ((stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
+                    right = true;
+                }
+
+                if ((stack.lastElement().getPoints()[i].x - WH_FIGURE) < LEFT_BORDER) {
+                    left = true;
+                }
+            }
+        } else if (maxY == HEIGHT) {
+            //check divides and bottom
+            for (int i = 0; i < 4; i++) {
+                if ((stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
+                    right = true;
+                }
+
+                if ((stack.lastElement().getPoints()[i].x - WH_FIGURE) < LEFT_BORDER) {
+                    left = true;
+                }
+
+                if ((stack.lastElement().getPoints()[i].y + WH_FIGURE) == HEIGHT) {
+                    bottom = true;
+                    break;
+                }
+
+            }
         }
+    }
+
+    private static int getMaxYFigure() {
+        int maxY = 0;
+        for (int i = 0; i < 4; i++) {
+            if (stack.lastElement().getPoints()[i].y > maxY) {
+                maxY = stack.lastElement().getPoints()[i].y;
+            }
+        }
+        return maxY;
     }
 
 
@@ -118,21 +142,22 @@ public class GameField {
 
     private static boolean moveGravity(Stack<Figure> figures) {
         boolean temp = false;
-        for (int i = 0; i < figures.lastElement().getPoints().length; i++) {
-            collisionDetect();
-            if (!bottom) {
+        collisionDetect();
+        if (!bottom) {
+            for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
                 figures.lastElement().getPoints()[i].y += WH_FIGURE;
-            } else {
-                clearUnusedFigure();
-                checkFillLine();
-                nullCollision();
-                run();
-                temp = true;
-                break;
+                System.out.println(figures.lastElement().getPoints()[i].getLocation());
             }
+        } else {
+            clearUnusedFigure();
+            checkFillLine();
+            nullCollision();
+            run();
+            temp = true;
         }
         return temp;
     }
+
 
     private static void checkFillLine() {
         int counter = 0;
@@ -218,8 +243,8 @@ public class GameField {
                 stack.lastElement().getPoints()[i].y += WH_FIGURE;
             }
         }
-        if (isRotation && stack.lastElement().getPoints().length > 4 ) {
-            if (getCollisionRotationBorder(stack.lastElement())) {
+        if (isRotation && stack.lastElement().getPoints().length > 4) {
+            if (!getCollisionRotationBorderDetect(stack.lastElement())) {
                 if (stack.size() > 1) {
                     int collision = 0;
                     for (int i = 4; i < 8; i++) {
@@ -242,10 +267,10 @@ public class GameField {
         }
     }
 
-    private static boolean getCollisionRotationBorder(Figure figure) {
+    private static boolean getCollisionRotationBorderDetect(Figure figure) {
         boolean collision = false;
         for (int i = 4; i < 8; i++) {
-            if (figure.getPoints()[i].x > LEFT_BORDER &&
+            if (figure.getPoints()[i].x > LEFT_BORDER ||
                     figure.getPoints()[i].x < RIGHT_BORDER) {
                 collision = true;
             }
@@ -274,8 +299,10 @@ public class GameField {
 
     private static void clearUnusedFigure() {
         for (int i = 0; i < stack.size(); i++) {
-            for (int j = 4; j < stack.get(i).getPoints().length; j++) {
-                stack.get(i).getPoints()[j] = null;
+            if(stack.get(i).getPoints().length < 4) {
+                for (int j = 4; j < stack.get(i).getPoints().length; j++) {
+                    stack.get(i).getPoints()[j] = null;
+                }
             }
         }
     }

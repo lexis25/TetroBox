@@ -1,13 +1,14 @@
 package main;
 
-import graphics.Figure;
-import logic.GameField;
+import logic.Game;
 import ui.Display;
+import java.awt.event.ActionEvent;
+import javax.swing.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        Display display = new Display();
-        display.create();
+        Game game = new Game();
+        game.start();
     }
 }
