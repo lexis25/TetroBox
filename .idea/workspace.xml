@@ -2,12 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b64366ce-cd4a-4af2-9aaf-67f03fabf0f0" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/TetroBox/src/main/java/test/TestGameField.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TetroBox/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TetroBox/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TetroBox/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/TetroBox/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TetroBox/src/main/java/logic/GameField.java" beforeDir="false" afterPath="$PROJECT_DIR$/TetroBox/src/main/java/logic/GameField.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TetroBox/src/main/java/main/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/TetroBox/src/main/java/main/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TetroBox/src/main/java/ui/Display.java" beforeDir="false" afterPath="$PROJECT_DIR$/TetroBox/src/main/java/ui/Display.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,9 +30,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -64,6 +59,9 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -154,8 +152,8 @@
       <window_info anchor="right" id="Capture Analysis" order="3" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="right" id="Maven Projects" order="3" />
-      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="bottom" id="Terminal" order="7" />
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
@@ -164,14 +162,14 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="2" />
       <window_info anchor="right" id="Theme Preview" order="3" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="right" id="Properties" order="3" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info id="Nl-Palette" order="2" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Key Promoter" order="3" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info id="Nl-Palette" order="2" />
+      <window_info anchor="right" id="Properties" order="3" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" />

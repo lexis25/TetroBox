@@ -1,10 +1,16 @@
 package logic;
 
 import graphics.Figure;
+import test.TestGameField;
 import util.Loader;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
 import java.util.*;
+import java.util.Timer;
 
 /***
  * Class virtual board
@@ -13,6 +19,7 @@ import java.util.*;
  * create gravity
  *
  */
+
 public class GameField {
 
     private final static int WIDTH = 320;
@@ -32,19 +39,16 @@ public class GameField {
 
     }
 
+    public static void main(String[] args) {
+        add(new Figure());
+        gravity(stack);
 
+    }
 
     public static void run() {
-
-        if (stack.empty()) {
-            add(new Figure());
-            gravity(stack);
-        } else {
-            collisionDetect();
-                add(new Figure());
-                gravity(stack);
-            }
-        }
+        add(new Figure());
+        gravity(stack);
+    }
 
     public static void add(Figure figure) {
         for (int i = 0; i < figure.getPoints().length; i++) {
@@ -54,24 +58,15 @@ public class GameField {
         stack.push(figure);
     }
 
-    public static void printStack() {
-        for (int i = 0; i < stack.size(); i++) {
-            for (int j = 0; j < 4; j++) {
-                System.out.println(stack.get(i).getPoints()[j].getLocation());
-            }
-        }
-    }
-
     public static void collisionDetect() {
         int maxY = getMaxYFigure();
-        System.out.println(maxY);
         if (maxY + WH_FIGURE == maxPointY && maxPointY < HEIGHT) {
-            //check divides, bottom and other object
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < stack.size() - 1; j++) {
                     if ((stack.lastElement().getPoints()[i].y + WH_FIGURE) == stack.get(j).getPoints()[i].y ||
                             (stack.lastElement().getPoints()[i].y + WH_FIGURE) == HEIGHT) {
                         bottom = true;
+                        searchMaxPointY();
                         break;
                     }
                     if (((stack.lastElement().getPoints()[i].x - WH_FIGURE) == stack.get(j).getPoints()[i].x &&
@@ -87,7 +82,6 @@ public class GameField {
                 }
             }
         } else if (maxY + WH_FIGURE < maxPointY && maxPointY != HEIGHT) {
-            //check divides
             for (int i = 0; i < 4; i++) {
                 if ((stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
                     right = true;
@@ -98,18 +92,17 @@ public class GameField {
                 }
             }
         } else if (maxY == HEIGHT) {
-            //check divides and bottom
             for (int i = 0; i < 4; i++) {
                 if ((stack.lastElement().getPoints()[i].x + WH_FIGURE) > RIGHT_BORDER) {
                     right = true;
                 }
-
                 if ((stack.lastElement().getPoints()[i].x - WH_FIGURE) < LEFT_BORDER) {
                     left = true;
                 }
 
                 if ((stack.lastElement().getPoints()[i].y + WH_FIGURE) == HEIGHT) {
                     bottom = true;
+                    searchMaxPointY();
                     break;
                 }
 
@@ -144,9 +137,9 @@ public class GameField {
         boolean temp = false;
         collisionDetect();
         if (!bottom) {
+            new TestGameField().printField(stack);
             for (int i = 0; i < stack.lastElement().getPoints().length; i++) {
                 figures.lastElement().getPoints()[i].y += WH_FIGURE;
-                System.out.println(figures.lastElement().getPoints()[i].getLocation());
             }
         } else {
             clearUnusedFigure();
@@ -158,27 +151,42 @@ public class GameField {
         return temp;
     }
 
-
-    private static void checkFillLine() {
-        int counter = 0;
-        ArrayList<Integer> listLines = new ArrayList<Integer>();
-        for (int j = 0; j < lines.length; j++) {
-            for (int i = 0; i < stack.size(); i++) {
-                for (int k = 0; k < 4; k++) {
-                    if (stack.get(i).getPoints()[k].y == lines[j]) {
-                        counter++;
-                    } else {
-                        counter--;
-                    }
-                }
-                if (counter == 10) {
-                    listLines.add(lines[j]);
-                    removeLines(listLines);
-                    countShore(listLines);
-                    counter = 0;
+    private static void searchMaxPointY() {
+        int max = 448;
+        for (int i = 0; i < stack.size(); i++) {
+            for (int j = 0; j < 4; j++) {
+                if (stack.get(i).getPoints()[j].y < max) {
+                    max = stack.get(i).getPoints()[j].y;
+                    System.out.println(stack.get(i).getNameFigure());
                 }
             }
-            counter = 0;
+        }
+        maxPointY = max;
+    }
+
+    private static void checkFillLine() {
+        if (stack.size() >= 3) {
+            int counter = 0;
+            ArrayList<Integer> listLines = new ArrayList<Integer>();
+            for (int j = 0; j < lines.length; j++) {
+                for (int i = 0; i < stack.size(); i++) {
+                    System.out.println("stack check");
+                    for (int k = 0; k < 4; k++) {
+                        if (stack.get(i).getPoints()[k].y == lines[j]) {//
+                            counter++;
+                        } else {
+                            counter--;
+                        }
+                    }
+                    if (counter == 10) {
+                        listLines.add(lines[j]);
+                        removeLines(listLines);
+                        countShore(listLines);
+                        counter = 0;
+                    }
+                }
+                counter = 0;
+            }
         }
     }
 
@@ -193,6 +201,19 @@ public class GameField {
             }
         }
         moveDown(listLines);
+    }
+
+    private static void moveDown(ArrayList<Integer> listLines) {
+        for (int k = 0; k < listLines.size(); k++) {
+            for (int i = 0; i < stack.size(); i++) {
+                for (int j = 0; j < 4; j++) {
+                    if (stack.get(i).getPoints()[j].y < listLines.get(k)) {
+                        stack.get(i).getPoints()[j].y += WH_FIGURE;
+                    }
+                }
+            }
+        }
+        searchMaxPointY();
     }
 
     private static void countShore(ArrayList<Integer> lines) {
@@ -212,20 +233,6 @@ public class GameField {
         }
     }
 
-    private static void moveDown(ArrayList<Integer> listLines) {
-        for (int k = 0; k < listLines.size(); k++) {
-            for (int i = 0; i < stack.size(); i++) {
-                for (int j = 0; j < 4; j++) {
-                    if (stack.get(i).getPoints()[j].y < listLines.get(k)) {
-                        stack.get(i).getPoints()[j].y += WH_FIGURE;
-                        if (maxPointY < stack.get(i).getPoints()[j].y) {
-                            maxPointY = stack.get(i).getPoints()[j].y;
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     public static void moveFigure(boolean isLeft, boolean isRight, boolean isBottom, boolean isRotation) {
         if (isLeft) {
@@ -299,7 +306,7 @@ public class GameField {
 
     private static void clearUnusedFigure() {
         for (int i = 0; i < stack.size(); i++) {
-            if(stack.get(i).getPoints().length < 4) {
+            if (stack.get(i).getPoints().length > 4) {
                 for (int j = 4; j < stack.get(i).getPoints().length; j++) {
                     stack.get(i).getPoints()[j] = null;
                 }

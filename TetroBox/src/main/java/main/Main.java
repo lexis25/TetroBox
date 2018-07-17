@@ -1,9 +1,6 @@
 package main;
 
 import logic.Game;
-import ui.Display;
-import java.awt.event.ActionEvent;
-import javax.swing.*;
 
 public class Main {
 
